@@ -1,16 +1,18 @@
 <?php
 
 use App\User;
+use App\Thread;
 use Faker\Generator as Faker;
 
 $factory->define(App\Message::class, function (Faker $faker) {
     return [
-        'subject'=> $faker->sentence, 
-        'message'=> $faker->text,
+        'body'=> $faker->paragraph, 
         'user_id'=> function ()
         {
             return App\User::all()->random(); 
         },
-        'read'=> $faker->boolean, 
+        'thread_id'=> function(){
+            return App\Thread::all()->random(); 
+        }, 
     ];
 });

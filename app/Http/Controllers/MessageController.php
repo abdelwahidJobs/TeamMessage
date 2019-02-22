@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Thread;
 use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,10 +24,10 @@ class MessageController extends Controller
          $this->middleware('auth:api')->except('index','show'); 
      }   
 
-    public function index()
+    public function index(Thread $thread)
     {
        // return  new MessageCollection(Message::all()) ; //Message::all(); 
-        return MessageCollection::Collection(Message::all());
+        return MessageCollection::Collection($thread->messages);
     }
 
     /**
@@ -45,12 +46,15 @@ class MessageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Resphpponse
      */
-    public function store(MessageRequest $request)
+    public function store(MessageRequest $request,Thread $thread)
     {   
             // la validation est fete par la class MessageRequest
-            $message = new Message($request->all()) ;
+             $message = new Message($request->all()) ;
              $message->user_id =  Auth::id();
+             $message->thread_id = $thread->id; 
              $message->save();
+             $thread->messages()->save($message);
+             
              return  response([
             'data' => new MessageResource($message)
               ],Response::HTTP_CREATED);

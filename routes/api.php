@@ -17,5 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::ApiResource('messages','MessageController'); 
+Route::ApiResource('threads','ThreadController'); 
+Route::group(['prefix'=>'threads'],function(){
+    Route::apiResource('/{thread}/messages','MessageController');
+  });

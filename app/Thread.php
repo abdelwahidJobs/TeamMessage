@@ -3,14 +3,14 @@
 namespace App;
 
 use App\User;
-use App\Thread;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class Thread extends Model
 {
 
-    protected $fillable = ['body']; 
+
+    protected $fillable = ['subject']; 
 
     protected static function boot()
     {
@@ -26,15 +26,15 @@ class Message extends Model
        return 'uuid';
     }
 
+    public function messages()
+    {
+       return $this->hasMany(Message::class); 
+      # code...
+    }
     public function user()
     {
-       return $this->belongsTo(User::class); 
-      # code...
-    }
-    public function thread()
-    {
-      return $this->belongsTo(Thread::class);
-      # code...
+        return $this->belongsTo(User::class); 
     }
 
+    //
 }

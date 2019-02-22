@@ -3,9 +3,10 @@
 namespace App\Http\Resources;
 
 use App\Http\Resources\UserResource;
+use App\Http\Resources\MessageCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\User; 
-class MessageCollection extends JsonResource
+
+class ThreadCollection extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -16,12 +17,11 @@ class MessageCollection extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=>$this->uuid, 
-            'time' => (string) $this->created_at, 
-            'read' => $this->read, 
-            'delete' => $this->delete, 
-            'creator'=>  new UserResource($this->user), 
-        ];
-        //parent::toArray($request);
+            'id' => $this->uuid, 
+            'subject'=> $this->subject, 
+            'creator'=> new UserResource($this->user), 
+            'messages'=>  MessageCollection::collection($this->messages),
+
+        ]; //parent::toArray($request);
     }
 }
