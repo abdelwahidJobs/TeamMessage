@@ -47,10 +47,9 @@ class MessageController extends Controller
      */
     public function store(MessageRequest $request)
     {   
-            $message = new Message ;
-            $message->subject = $request->subject;
-            $message->message = $request->message;
-            $message->user_id =  Auth::id();
+            // la validation est fete par la class MessageRequest
+            $message = new Message($request->all()) ;
+             $message->user_id =  Auth::id();
              $message->save();
              return  response([
             'data' => new MessageResource($message)
